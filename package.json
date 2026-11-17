@@ -1,19 +1,52 @@
 {
   "name": "solana-priority-fee",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Estimate a Solana priority fee from any RPC's getRecentPrioritizationFees: percentiles, levels, lamport cost and the ComputeBudget instruction bytes. Zero dependencies. By Blix.",
   "type": "module",
   "main": "src/index.js",
   "types": "index.d.ts",
-  "exports": { ".": { "types": "./index.d.ts", "default": "./src/index.js" } },
-  "bin": { "solana-priority-fee": "bin/cli.js" },
-  "files": ["src", "bin", "index.d.ts", "README.md", "LICENSE"],
-  "scripts": { "test": "node --test" },
-  "engines": { "node": ">=20" },
-  "keywords": ["solana", "priority-fee", "compute-budget", "compute-unit-price", "getRecentPrioritizationFees", "micro-lamports", "transaction-fees", "rpc", "crypto", "blix"],
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./src/index.js"
+    }
+  },
+  "bin": {
+    "solana-priority-fee": "bin/cli.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "index.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "solana",
+    "priority-fee",
+    "compute-budget",
+    "compute-unit-price",
+    "getRecentPrioritizationFees",
+    "micro-lamports",
+    "transaction-fees",
+    "rpc",
+    "crypto",
+    "blix"
+  ],
   "author": "Blix (https://blixvip.com)",
   "license": "MIT",
   "homepage": "https://blixvip.com",
-  "repository": { "type": "git", "url": "git+https://github.com/blixvip/solana-priority-fee.git" },
-  "bugs": { "url": "https://github.com/blixvip/solana-priority-fee/issues" }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blixvip/solana-priority-fee.git"
+  },
+  "bugs": {
+    "url": "https://github.com/blixvip/solana-priority-fee/issues"
+  }
 }
