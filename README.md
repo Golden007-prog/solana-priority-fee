@@ -10,7 +10,7 @@
 
 <a href="https://blixvip.com"><img src="assets/blix-hero.jpg" width="100%" alt="BLIX: AI-powered Solana memecoin terminal. Trade memes first."></a>
 
-**[Start trading at blixvip.com →](https://blixvip.com)** &nbsp;·&nbsp; [Public API](https://blixvip.com/api) &nbsp;·&nbsp; [MCP server](https://blixvip.com/mcp) &nbsp;·&nbsp; [Discord](https://discord.gg/grokbot)
+**[Start trading at blixvip.com →](https://blixvip.com)** &nbsp;·&nbsp; [Website + guides](https://blixvip.github.io/solana-priority-fee/) &nbsp;·&nbsp; [Public API](https://blixvip.com/api) &nbsp;·&nbsp; [MCP server](https://blixvip.com/mcp) &nbsp;·&nbsp; [Discord](https://discord.gg/grokbot)
 
 Built by the team behind **[Blix](https://blixvip.com)**, a Solana memecoin terminal; this is the fee check we run before building a swap, as a standalone library.
 
@@ -101,6 +101,18 @@ costLamports(fee.recommended.high, 200_000);   // lamports, on top of the base f
 
 Run any of them with `node examples/<name>.js`.
 
+### Integrations
+
+| | |
+|---|---|
+| [`examples/integrations/http-endpoint`](examples/integrations/http-endpoint) | a JSON fee API on `node:http`: `GET /fee?accounts=...`, cached 2 s, CORS open |
+| [`examples/integrations/discord-alert`](examples/integrations/discord-alert) | posts to a Discord webhook when the fee on an account crosses a threshold, and when it comes back down |
+
+### Guides
+
+- [How to set a Solana priority fee in JavaScript](https://blixvip.github.io/solana-priority-fee/set-solana-priority-fee-javascript.html) (web3.js, @solana/kit, raw bytes)
+- [What is a good Solana priority fee right now (and how to measure it)](https://blixvip.github.io/solana-priority-fee/what-is-a-good-solana-priority-fee.html)
+
 ## API
 
 `estimatePriorityFee`, `getRecentFees`, `summarizeFees`, `percentile`, `watch`, `costLamports`, `toInstructionsData`, `setComputeUnitLimitData`, `setComputeUnitPriceData`, the constants, and the `RpcError` / `RpcTimeoutError` classes. Full reference in [docs/API.md](docs/API.md); types in [index.d.ts](index.d.ts).
@@ -153,6 +165,11 @@ Issues and pull requests are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md). Qu
 | [solana-ws-keepalive](https://github.com/blixvip/solana-ws-keepalive) | Solana WebSocket subscriptions that reconnect on their own |
 | [pump-curve](https://github.com/blixvip/pump-curve) | Read a pump.fun bonding curve: price, market cap, progress, migration (its curve address is a good account to scope fees to) |
 | [solana-tx-parse](https://github.com/blixvip/solana-tx-parse) | See the priority fee a landed transaction actually paid |
+
+## Good first issues
+
+New here? These are small, scoped tasks with step-by-step instructions (what to change, where, and when it is done):
+**[good first issues →](https://github.com/blixvip/solana-priority-fee/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)**. Bigger pieces, like a Cloudflare Worker endpoint and a Discord bot command, are under [help wanted](https://github.com/blixvip/solana-priority-fee/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22). Comment "I'll take this" on one before you start, and ask anything in [Discussions](https://github.com/blixvip/solana-priority-fee/discussions) or the [Discord](https://discord.gg/grokbot).
 
 ## Contributors
 
