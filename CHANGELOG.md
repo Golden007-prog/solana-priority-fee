@@ -7,6 +7,9 @@ All notable changes to this project are documented here. The format follows [Kee
 ### Added
 
 - `watch()` can keep a configurable number of recent fee windows and report a distinct-slot summary and median trend.
+- `examples/integrations/http-endpoint`: a JSON fee API on `node:http` with a short cache.
+- `examples/integrations/discord-alert`: a Discord webhook alert when fees on an account cross a threshold.
+- GitHub Pages site in `docs/` (https://blixvip.github.io/solana-priority-fee/) with two guides.
 
 ## [1.0.1] - 2026-11-17
 

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What is a good Solana priority fee right now (and how to measure it) | Blix open source</title>
+<meta name="description" content="A good Solana priority fee depends on the account you write to, not the network. How to measure it with getRecentPrioritizationFees, what the numbers mean, and real mainnet readings.">
+<link rel="canonical" href="https://blixvip.github.io/solana-priority-fee/what-is-a-good-solana-priority-fee.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What is a good Solana priority fee right now (and how to measure it) | Blix open source">
+<meta property="og:description" content="A good Solana priority fee depends on the account you write to, not the network. How to measure it with getRecentPrioritizationFees, what the numbers mean, and real mainnet readings.">
+<meta property="og:url" content="https://blixvip.github.io/solana-priority-fee/what-is-a-good-solana-priority-fee.html">
+<meta property="og:image" content="https://raw.githubusercontent.com/blixvip/solana-priority-fee/main/assets/blix-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://raw.githubusercontent.com/blixvip/sol-holders/main/assets/blix-icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"What is a good Solana priority fee right now (and how to measure it)","description":"A good Solana priority fee depends on the account you write to, not the network. How to measure it with getRecentPrioritizationFees, what the numbers mean, and real mainnet readings.","url":"https://blixvip.github.io/solana-priority-fee/what-is-a-good-solana-priority-fee.html","datePublished":"2026-11-17","dateModified":"2026-11-17","author":{"@type":"Organization","name":"Blix","url":"https://blixvip.com"},"publisher":{"@type":"Organization","name":"Blix","url":"https://blixvip.com"},"about":{"@type":"SoftwareSourceCode","name":"solana-priority-fee","codeRepository":"https://github.com/blixvip/solana-priority-fee"}}</script>
+<style>
+:root{color-scheme:dark;--bg:#0a0a0b;--panel:#141416;--line:#26262a;--ink:#f3f3f5;--muted:#a0a0a8;--accent:#8fb4ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+main{max-width:780px;margin:0 auto;padding:32px 16px 64px}
+nav{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-size:14px;margin-bottom:36px}nav .brand{font-weight:700;color:var(--ink);margin-right:auto}
+h1{font-size:clamp(28px,5.5vw,40px);line-height:1.15;margin:0 0 12px;letter-spacing:-.02em}h2{font-size:22px;margin:40px 0 12px}h3{font-size:18px;margin:28px 0 8px}
+.lead{font-size:19px;color:var(--muted);margin:0 0 28px}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:0 0 16px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}p code,li code,td code{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.wrap{overflow-x:auto;margin:0 0 16px}table{border-collapse:collapse;width:100%;font-size:15px}th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}th{background:var(--panel)}
+ul,ol{padding-left:22px}li{margin:6px 0}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:32px 0}.box h2{margin-top:0}
+.btn{display:inline-block;padding:10px 18px;border-radius:999px;border:1px solid var(--line);color:var(--ink);font-weight:600;margin:4px 8px 4px 0}.btn.main{background:var(--ink);color:#000;border-color:var(--ink)}.btn:hover{text-decoration:none;opacity:.9}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;color:var(--ink)}.card:hover{text-decoration:none;border-color:#3a3a40}.card b{display:block;margin-bottom:4px}.card span{color:var(--muted);font-size:14px}
+footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<main>
+<nav><a class="brand" href="https://blixvip.github.io/">BLIX open source</a><a href="https://blixvip.github.io/solana-priority-fee/">solana-priority-fee</a><a href="https://github.com/blixvip/solana-priority-fee">GitHub</a><a href="https://discord.gg/grokbot">Discord</a><a href="https://blixvip.com">blixvip.com</a></nav>
+<article>
+<h1>What is a good Solana priority fee right now (and how to measure it)</h1>
+<p class="lead">There is no single "current Solana priority fee". The price that lands depends on which accounts your transaction writes: a hot pool can need a high price while the rest of the network clears at zero. Here is how to measure the right number for your transaction, and what we saw on mainnet today.</p>
+<h2>Short answer</h2>
+<p>Measure it for the account you write to and take the 75th percentile of recent blocks. On 2026-11-17, for swaps through the Raydium SOL-USDC pool, that was <strong>10,000 micro-lamports per compute unit</strong>, which is 2,000 lamports (0.000002 SOL) for a 200,000 CU transaction, on top of the 5,000-lamport base fee. The same measurement without an account was 0. Your numbers will differ; the method is what carries over.</p>
+<h2>What the RPC actually reports</h2>
+<p><code>getRecentPrioritizationFees</code> returns one number per block for the last ~150 blocks (about a minute). Each number is a <strong>floor</strong>: the lowest compute unit price paid by any transaction in that block that write-locked the accounts you passed. It is not an average and not what most transactions paid.</p>
+<p>So read it this way: if the 75th percentile is 10,000, then in three of four recent blocks a transaction on that account landed while paying at most 10,000. Paying that much puts you at or above the cheapest successful transaction in most blocks.</p>
+<h2>Measure it in one command</h2>
+<pre><code>npx github:blixvip/solana-priority-fee 58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2</code></pre>
+<p>Output from the public mainnet RPC, 2026-11-17 23:30 UTC:</p>
+<pre><code>150 slots (470718277-470718426), 1 account; 59.3% of slots had a non-zero fee
+
+  percentile         micro-lamports/CU
+  min                               0
+  p25                               0
+  p50                           3,227
+  p75                          10,000
+  p90                          10,000
+  p95                          10,000
+  max                       1,000,000
+
+  level              micro-lamports/CU   cost at 200,000 CU
+  low (p25)                         0            0 lamports
+  medium (p50)                  3,227          646 lamports
+  high (p75)                   10,000        2,000 lamports
+  veryHigh (p95)               10,000        2,000 lamports
+  unsafeMax (p100)          1,000,000      200,000 lamports
+
+  cost excludes the 5,000 lamport base fee per signature.</code></pre>
+<p>Without an account, a minute later:</p>
+<pre><code>150 slots (470718292-470718441), no account filter; 0.0% of slots had a non-zero fee
+  ...
+  p50 0, p75 0, p95 0, max 0</code></pre>
+<p>That zero is the trap: the unscoped answer is each block's lowest price, and somebody always lands for free. It says nothing about your pool.</p>
+<h2>Measure it with plain fetch</h2>
+<p>No library needed for the raw numbers:</p>
+<pre><code>const RPC = process.env.SOLANA_RPC_URL ?? "https://api.mainnet-beta.solana.com";
+const POOL = "58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2";
+
+const res = await fetch(RPC, {
+  method: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "getRecentPrioritizationFees", params: [[POOL]] }),
+});
+const { result } = await res.json();
+const fees = result.map((r) =&gt; r.prioritizationFee).sort((a, b) =&gt; a - b);
+const p = (q) =&gt; fees[Math.max(0, Math.ceil(q * fees.length) - 1)];
+console.log(`${fees.length} slots; p50 ${p(0.5)}, p75 ${p(0.75)}, p95 ${p(0.95)} micro-lamports/CU`);</code></pre>
+<pre><code>150 slots; p50 10000, p75 10000, p95 1000000 micro-lamports/CU</code></pre>
+<h2>Which level to use</h2>
+<div class="wrap"><table><tr><th>Level</th><th>Percentile</th><th>When</th></tr>
+<tr><td><code>low</code></td><td>p25</td><td>Not in a hurry; a retry is fine</td></tr>
+<tr><td><code>medium</code></td><td>p50</td><td>Normal transfers and quiet pools</td></tr>
+<tr><td><code>high</code></td><td>p75</td><td>A reasonable default for swaps</td></tr>
+<tr><td><code>veryHigh</code></td><td>p95</td><td>A launch, a busy pump.fun curve, a liquidation</td></tr>
+<tr><td><code>unsafeMax</code></td><td>p100</td><td>The highest floor seen; usually one outlier. Rarely worth it</td></tr></table></div>
+<p>Use <code>--ignore-zero</code> when most blocks report 0 and you want the price among blocks where somebody did pay.</p>
+<h2>What a price costs</h2>
+<div class="wrap"><table><tr><th>Price (micro-lamports/CU)</th><th>At 200,000 CU</th><th>At 1,400,000 CU</th></tr>
+<tr><td>1,000</td><td>200 lamports</td><td>1,400 lamports</td></tr>
+<tr><td>10,000</td><td>2,000 lamports</td><td>14,000 lamports</td></tr>
+<tr><td>100,000</td><td>20,000 lamports</td><td>140,000 lamports</td></tr>
+<tr><td>1,000,000</td><td>200,000 lamports (0.0002 SOL)</td><td>1,400,000 lamports (0.0014 SOL)</td></tr></table></div>
+<p>Formula: <code>ceil(price × computeUnitLimit / 1,000,000)</code> lamports, plus 5,000 per signature. Requesting fewer compute units cuts the fee as much as lowering the price.</p>
+<h2>What it does not cover</h2>
+<ul>
+<li><strong>Jito tips and staked senders.</strong> They help a transaction land too but are separate from the priority fee.</li>
+<li><strong>Helius' getPriorityFeeEstimate.</strong> A different, Helius-only API with its own method. Its numbers will not match these.</li>
+<li><strong>One node, one minute.</strong> A recently restarted node has fewer blocks, and 150 blocks is short. Re-measure right before you send.</li>
+</ul>
+<h2>Watch it over time</h2>
+<p>To be told when fees on your account spike, run the repo's <a href="https://github.com/blixvip/solana-priority-fee/tree/main/examples/integrations/discord-alert">Discord fee alert</a>; to serve the number to several bots or a frontend, run the <a href="https://github.com/blixvip/solana-priority-fee/tree/main/examples/integrations/http-endpoint">HTTP fee endpoint</a>. To put the price into a transaction, see <a href="set-solana-priority-fee-javascript.html">How to set a Solana priority fee in JavaScript</a>.</p>
+</article>
+<div class="box"><h2>Want it done for you?</h2>
+<p>This is the small, open version. <a href="https://blixvip.com">Blix</a> is the AI-powered Solana memecoin terminal it comes from: every pump.fun launch live, AI coin ratings, narratives, wallet and X tracking, and one-click trading with 0% fees. There is a <a href="https://blixvip.com/api">public API</a> and an <a href="https://blixvip.com/mcp">MCP server</a> too.</p>
+<p><a class="btn main" href="https://blixvip.com">Start trading at blixvip.com</a><a class="btn" href="https://discord.gg/grokbot">Join the Discord</a></p></div>
+<h2>Help build it</h2>
+<p>solana-priority-fee is open source and takes pull requests. There are <a href="https://github.com/blixvip/solana-priority-fee/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22good%20first%20issue%22">good first issues</a> with step-by-step instructions, and setup is <code>git clone</code> and <code>npm test</code>. If it helped, a <a href="https://github.com/blixvip/solana-priority-fee">star on GitHub</a> helps other developers find it.</p>
+<h2>More guides</h2>
+<div class="grid"><a class="card" href="set-solana-priority-fee-javascript.html"><b>How to set a Solana priority fee in JavaScript</b><span>solana-priority-fee</span></a><a class="card" href="https://blixvip.github.io/solana-readonly-mcp/give-claude-access-to-solana-data-mcp.html"><b>How to give Claude access to Solana data with MCP</b><span>solana-readonly-mcp</span></a><a class="card" href="https://blixvip.github.io/solana-rpc-pool/fix-solana-rpc-429-too-many-requests.html"><b>How to stop Solana RPC 429 errors (Too Many Requests)</b><span>solana-rpc-pool</span></a><a class="card" href="https://blixvip.github.io/pump-curve/pump-fun-market-cap-without-api.html"><b>How to get a pump.fun token's market cap and bonding curve progress without an API</b><span>pump-curve</span></a></div>
+<footer>Written by the <a href="https://blixvip.com">Blix</a> team. Code is MIT licensed. <a href="https://github.com/blixvip">github.com/blixvip</a> · <a href="https://discord.gg/grokbot">discord.gg/grokbot</a> · <a href="https://blixvip.github.io/">All tools and guides</a></footer>
+</main>
+</body>
+</html>

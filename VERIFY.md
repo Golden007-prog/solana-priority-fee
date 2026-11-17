@@ -100,3 +100,56 @@ slot 470680163: medium 10000 micro-lamports/CU, 85% of slots non-zero
 ## Known limitations
 
 See README "Limitations": per-block minimums, one node's view, ~1 minute window, base fee and Jito tips not included.
+
+## Integrations, Pages site and guide snippets (2026-11-17, second pass)
+
+Windows 11, Node v24.15.0, public mainnet RPC only, one call at a time with 2-3 s gaps. Nothing was signed or sent.
+
+### `npm test`
+
+```
+ℹ tests 19
+ℹ pass 18
+ℹ fail 0
+ℹ skipped 1      (the LIVE=1 test)
+```
+
+`test/integrations.test.js` (4 tests, offline): the HTTP endpoint against the Raydium fixture (JSON shape, `costLamports`, CORS header, second request served from cache, 400 for a bad address and for `cu=2000000`, 404, `/health`), RPC failure → 502 and not cached, Discord message shape within Discord's embed limits, and `postWebhook` against a local server that answers 429 once then 204 (one retry, JSON body intact).
+
+### HTTP endpoint, live
+
+```
+$ PORT=8799 node examples/integrations/http-endpoint/server.js
+fee API on http://127.0.0.1:8799/fee?accounts=<address>  (Ctrl+C to stop)
+
+$ curl "http://127.0.0.1:8799/fee?accounts=58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2"
+{"accounts":["58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2"],"unit":"microLamportsPerComputeUnit","slots":150,"firstSlot":470719179,"lastSlot":470719328,"samplesUsed":150,"ignoreZero":false,"nonZeroShare":0.7267,"percentiles":{"min":0,"p25":0,"p50":10000,"p75":10000,"p90":10000,"p95":10000,"max":1000000},"levels":{...},"recommended":{"low":0,"medium":10000,"high":10000,"veryHigh":10000,"unsafeMax":1000000},"computeUnitLimit":200000,"costLamports":{"low":0,"medium":2000,"high":2000,"veryHigh":2000,"unsafeMax":200000},"baseFeeLamportsPerSignature":5000}
+HTTP 200 0.226s
+cached repeat: HTTP 200 0.002s
+/fee?accounts=bad -> {"error":"not a Solana address: bad"} HTTP 400
+/health -> {"ok":true} HTTP 200
+```
+
+### Discord alert, live estimate
+
+- `DRY_RUN=1 ONCE=1 node examples/integrations/discord-alert/alert.js` printed the payload: title `Solana priority fee now: 10,000 micro-lamports/CU`, 3 fields (`10,000 / 10,000 / 10,000`, `2,000 lamports + 5,000 base`, `73%`).
+- `ONCE=1 DISCORD_WEBHOOK_URL=http://127.0.0.1:8798/api/webhooks/123/token ...` against a local mock webhook: `mock webhook got POST /api/webhooks/123/token application/json: username=Solana fee alert, embeds=1, ...` and the script printed `posted (204): ...`.
+- No `DISCORD_WEBHOOK_URL` and no `DRY_RUN`: exits 1 with a message saying what to set.
+- Watch mode (`INTERVAL_SEC=5 THRESHOLD=5000`) ran for 12 s: printed `watching 58oQ...YQo2 every 5s: alert when high >= 5,000`; fees stayed on one side of the threshold, so (correctly) nothing was posted.
+- **Not verified:** posting to a real Discord webhook (none available here). The payload uses Discord's documented webhook fields (`username`, `embeds[].title/description/color/fields/footer/timestamp`) within their size limits.
+
+### Guide snippets (`docs/*.html`), run as printed
+
+Run in a temp project with `@solana/web3.js@1.99.0`, `@solana/kit@8.6.0`, `@solana-program/compute-budget@0.20.0` and `npm install github:blixvip/solana-priority-fee` (the repo itself still has no dependencies):
+
+| Snippet | Output |
+|---|---|
+| web3.js: estimate, add both Compute Budget instructions, `getFeeForMessage` | `price 10000 micro-lamports/CU, total fee 7000 lamports` (5,000 base + 2,000 priority, as the formula says) |
+| @solana/kit with `@solana-program/compute-budget` | `2 instructions; price 10000 micro-lamports/CU` |
+| raw bytes with `toInstructionsData(10_000, 200_000)` | `ComputeBudget111111111111111111111111111111`, `02400d0300`, `031027000000000000` |
+| (extra check) our bytes vs web3.js `ComputeBudgetProgram` for the same values | `limit equal: true price equal: true` |
+| plain `fetch` of `getRecentPrioritizationFees` | `150 slots; p50 10000, p75 10000, p95 1000000 micro-lamports/CU` |
+| landing-page library snippet | `10000 2000 2` (price, lamports, instruction count) |
+| `npx github:blixvip/solana-priority-fee <pool>` | 150 slots, table printed |
+
+The CLI readings quoted on the pages (pool: p50 3,227 / p75 10,000 / max 1,000,000, 59.3% non-zero; unscoped: all 150 slots zero) are real output from 2026-11-17 23:30 UTC.

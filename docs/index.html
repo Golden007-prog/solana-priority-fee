@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>solana-priority-fee: Solana priority fee estimator for JavaScript | Blix open source</title>
+<meta name="description" content="The compute unit price recent Solana blocks landed at, scoped to the pool or bonding curve your transaction writes to, as percentiles and levels, plus the Compute Budget instruction bytes to pay it. Any RPC. Zero dependencies.">
+<meta name="keywords" content="Solana priority fee, compute unit price, getRecentPrioritizationFees, Solana fee estimator, setComputeUnitPrice, micro-lamports, Solana transaction fee JavaScript">
+<link rel="canonical" href="https://blixvip.github.io/solana-priority-fee/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="solana-priority-fee: Solana priority fee estimator for JavaScript">
+<meta property="og:description" content="The compute unit price recent Solana blocks landed at, scoped to the pool or bonding curve your transaction writes to, as percentiles and levels, plus the Compute Budget instruction bytes to pay it. Any RPC. Zero dependencies.">
+<meta property="og:url" content="https://blixvip.github.io/solana-priority-fee/">
+<meta property="og:image" content="https://raw.githubusercontent.com/blixvip/solana-priority-fee/main/assets/blix-hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://raw.githubusercontent.com/blixvip/sol-holders/main/assets/blix-icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareSourceCode","name":"solana-priority-fee","description":"The compute unit price recent Solana blocks landed at, scoped to the pool or bonding curve your transaction writes to, as percentiles and levels, plus the Compute Budget instruction bytes to pay it. Any RPC. Zero dependencies.","codeRepository":"https://github.com/blixvip/solana-priority-fee","programmingLanguage":"JavaScript","runtimePlatform":"Node.js 20+","license":"https://opensource.org/licenses/MIT","url":"https://blixvip.github.io/solana-priority-fee/","author":{"@type":"Organization","name":"Blix","url":"https://blixvip.com"}}</script>
+<style>
+:root{color-scheme:dark;--bg:#0a0a0b;--panel:#141416;--line:#26262a;--ink:#f3f3f5;--muted:#a0a0a8;--accent:#8fb4ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+main{max-width:860px;margin:0 auto;padding:32px 16px 64px}
+nav{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;font-size:14px;margin-bottom:36px}nav .brand{font-weight:700;color:var(--ink);margin-right:auto}
+h1{font-size:clamp(30px,6vw,46px);line-height:1.1;margin:0 0 6px;letter-spacing:-.02em}h2{font-size:20px;margin:40px 0 12px}
+.tag{color:var(--muted);font-size:clamp(17px,3vw,21px);margin:0 0 20px}.lead{font-size:18px;margin:0 0 24px}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 28px}.btn{display:inline-block;padding:10px 18px;border-radius:999px;border:1px solid var(--line);color:var(--ink);font-weight:600}.btn.main{background:var(--ink);color:#000;border-color:var(--ink)}.btn:hover{text-decoration:none;opacity:.9}
+pre{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;font:14px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;margin:0 0 14px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.92em}p code,li code{background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+ul{padding-left:20px;margin:0}li{margin:6px 0}
+.hero{display:block;margin:28px 0 8px}.hero img{width:100%;height:auto;border-radius:12px;border:1px solid var(--line);display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}.card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;color:var(--ink)}.card:hover{text-decoration:none;border-color:#3a3a40}.card b{display:block;margin-bottom:4px}.card span{color:var(--muted);font-size:14px}
+footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+<main>
+<nav><a class="brand" href="https://blixvip.github.io/">BLIX open source</a><a href="https://github.com/blixvip/solana-priority-fee">GitHub</a><a href="https://github.com/blixvip/solana-priority-fee/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22good%20first%20issue%22">Good first issues</a><a href="https://github.com/blixvip/solana-priority-fee/discussions">Discussions</a><a href="https://discord.gg/grokbot">Discord</a><a href="https://blixvip.com">blixvip.com</a></nav>
+<h1>solana-priority-fee</h1>
+<p class="tag">Solana priority fee estimator for JavaScript</p>
+<p class="lead">The compute unit price recent Solana blocks landed at, scoped to the pool or bonding curve your transaction writes to, as percentiles and levels, plus the Compute Budget instruction bytes to pay it. Any RPC. Zero dependencies.</p>
+<div class="cta"><a class="btn main" href="https://github.com/blixvip/solana-priority-fee">View on GitHub</a><a class="btn" href="https://blixvip.com">Start trading at blixvip.com</a><a class="btn" href="https://discord.gg/grokbot">Join the Discord</a></div>
+<h2>Try it</h2>
+<pre><code>npx github:blixvip/solana-priority-fee 58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2</code></pre>
+<p>The account is the Raydium SOL-USDC pool, which every swap through it writes to. Real output from the public mainnet RPC on 2026-11-17:</p>
+<pre><code>150 slots (470718277-470718426), 1 account; 59.3% of slots had a non-zero fee
+
+  percentile         micro-lamports/CU
+  min                               0
+  p25                               0
+  p50                           3,227
+  p75                          10,000
+  p90                          10,000
+  p95                          10,000
+  max                       1,000,000
+
+  level              micro-lamports/CU   cost at 200,000 CU
+  low (p25)                         0            0 lamports
+  medium (p50)                  3,227          646 lamports
+  high (p75)                   10,000        2,000 lamports
+  veryHigh (p95)               10,000        2,000 lamports
+  unsafeMax (p100)          1,000,000      200,000 lamports
+
+  cost excludes the 5,000 lamport base fee per signature.</code></pre>
+<h2>What it does</h2>
+<ul><li>Percentiles (min, p25, p50, p75, p90, p95, max) of the last ~150 blocks, in micro-lamports per compute unit</li><li>Scoped to up to 128 writable accounts, so you see the price for <em>your</em> pool, not the whole network</li><li>Named levels <code>low</code> / <code>medium</code> / <code>high</code> / <code>veryHigh</code>, each one changeable</li><li>The lamport cost, rounded the way the runtime rounds it</li><li>The SetComputeUnitLimit and SetComputeUnitPrice instruction bytes, without <code>@solana/web3.js</code></li><li>Works with any Solana RPC, including the free public one</li></ul>
+<h2>Use it in your code</h2>
+<pre><code>npm install github:blixvip/solana-priority-fee</code></pre>
+<pre><code>import { estimatePriorityFee, toInstructionsData, costLamports } from "solana-priority-fee";
+
+const fee = await estimatePriorityFee({ accounts: ["58oQChx4yWmvKdwLLZzBi4ChoCc2fqCUWBkwMihLYQo2"] });
+fee.recommended.high;                        // p75, micro-lamports per CU
+costLamports(fee.recommended.high, 200_000); // lamports on top of the base fee
+toInstructionsData(fee.recommended.high, 200_000).instructions; // the two Compute Budget instructions</code></pre>
+<h2>Ready-made integrations</h2>
+<ul>
+<li><a href="https://github.com/blixvip/solana-priority-fee/tree/main/examples/integrations/http-endpoint"><strong>HTTP fee endpoint</strong></a>: <code>GET /fee?accounts=...</code> returns the estimate as JSON, cached for two seconds, on plain <code>node:http</code>.</li>
+<li><a href="https://github.com/blixvip/solana-priority-fee/tree/main/examples/integrations/discord-alert"><strong>Discord fee alert</strong></a>: posts to a channel webhook when fees on an account cross your threshold, and again when they come back down.</li>
+</ul>
+<p>Full documentation, the API and the limits are in the <a href="https://github.com/blixvip/solana-priority-fee#readme">README</a>. MIT licensed, no dependencies.</p>
+<a class="hero" href="https://blixvip.com"><img src="https://raw.githubusercontent.com/blixvip/solana-priority-fee/main/assets/blix-hero.jpg" alt="BLIX: AI-powered Solana memecoin terminal. Trade memes first." width="1600" height="900" loading="lazy"></a>
+<h2>Guides</h2>
+<ul><li><a href="set-solana-priority-fee-javascript.html">How to set a Solana priority fee in JavaScript</a></li><li><a href="what-is-a-good-solana-priority-fee.html">What is a good Solana priority fee right now (and how to measure it)</a></li></ul>
+<h2>From the team behind Blix</h2>
+<p>solana-priority-fee is a small, open piece of what runs behind <a href="https://blixvip.com">Blix</a>, the AI-powered Solana memecoin terminal with 0% fees: every pump.fun launch live, AI coin ratings, narratives, wallet and X tracking, and one-click trading. If you want the result rather than the plumbing, <a href="https://blixvip.com">start trading at blixvip.com</a>. There is also a <a href="https://blixvip.com/api">public API</a> and an <a href="https://blixvip.com/mcp">MCP server</a> for AI agents.</p>
+<h2>Contribute</h2>
+<p>Pull requests are welcome and there are <a href="https://github.com/blixvip/solana-priority-fee/issues?q=is%3Aissue%20is%3Aopen%20label%3A%22good%20first%20issue%22">good first issues</a> with step-by-step instructions. Setup is <code>git clone</code> and <code>npm test</code>. Ideas and questions go in <a href="https://github.com/blixvip/solana-priority-fee/discussions">Discussions</a> or the <a href="https://discord.gg/grokbot">Discord</a>.</p>
+<h2>More Solana tools from Blix</h2>
+<div class="grid"><a class="card" href="https://blixvip.github.io/solana-readonly-mcp/"><b>solana-readonly-mcp</b><span>Read-only Solana MCP server for Claude, Cursor and AI agents</span></a><a class="card" href="https://blixvip.github.io/solana-rpc-pool/"><b>solana-rpc-pool</b><span>A Solana RPC load balancer: several endpoints, rate limits, failover</span></a><a class="card" href="https://blixvip.github.io/pump-curve/"><b>pump-curve</b><span>Read a pump.fun bonding curve: price, market cap, progress, migration</span></a><a class="card" href="https://blixvip.github.io/sol-holders/"><b>sol-holders</b><span>Top holders of any Solana token, grouped by wallet, pools left out</span></a><a class="card" href="https://blixvip.github.io/solana-ws-keepalive/"><b>solana-ws-keepalive</b><span>Solana WebSocket subscriptions that reconnect on their own</span></a></div>
+<footer>MIT licensed. Made by <a href="https://blixvip.com">Blix</a>. <a href="https://github.com/blixvip">github.com/blixvip</a> · <a href="https://discord.gg/grokbot">discord.gg/grokbot</a></footer>
+</main>
+</body>
+</html>
