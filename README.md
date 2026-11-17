@@ -147,6 +147,7 @@ Issues and pull requests are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md). Qu
 | [solana-rpc-pool](https://github.com/blixvip/solana-rpc-pool) | A Solana RPC load balancer: several endpoints, rate limits, failover |
 | [solana-ws-keepalive](https://github.com/blixvip/solana-ws-keepalive) | Solana WebSocket subscriptions that reconnect on their own |
 | [pump-curve](https://github.com/blixvip/pump-curve) | Read a pump.fun bonding curve: price, market cap, progress, migration (its curve address is a good account to scope fees to) |
+| [solana-tx-parse](https://github.com/blixvip/solana-tx-parse) | See the priority fee a landed transaction actually paid |
 
 ## License
 
