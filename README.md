@@ -1,15 +1,20 @@
 # solana-priority-fee
 
-**What compute-unit price recent Solana blocks were landing at.** Percentiles and named levels from any RPC's `getRecentPrioritizationFees`, optionally scoped to the pool or bonding curve your transaction writes to, plus the raw ComputeBudget instruction bytes to pay that price. Zero dependencies.
+**Solana priority fee estimator: the compute unit price recent blocks were landing at.** Percentiles and named levels from any RPC's `getRecentPrioritizationFees`, optionally scoped to the pool or bonding curve your transaction writes to, plus the raw ComputeBudget instruction bytes to pay that price. Zero dependencies.
 
 ![dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen)
 ![node: 20+](https://img.shields.io/badge/node-20%2B-blue)
 [![license: MIT](https://img.shields.io/badge/license-MIT-black)](LICENSE)
 [![Discord](https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white)](https://discord.gg/grokbot)
+[![GitHub stars](https://img.shields.io/github/stars/blixvip/solana-priority-fee?style=social)](https://github.com/blixvip/solana-priority-fee/stargazers)
 
 <a href="https://blixvip.com"><img src="assets/blix-hero.jpg" width="100%" alt="BLIX: AI-powered Solana memecoin terminal. Trade memes first."></a>
 
+**[Start trading at blixvip.com →](https://blixvip.com)** &nbsp;·&nbsp; [Public API](https://blixvip.com/api) &nbsp;·&nbsp; [MCP server](https://blixvip.com/mcp) &nbsp;·&nbsp; [Discord](https://discord.gg/grokbot)
+
 Built by the team behind **[Blix](https://blixvip.com)**, a Solana memecoin terminal; this is the fee check we run before building a swap, as a standalone library.
+
+If solana-priority-fee saves you time, **[give it a ⭐](https://github.com/blixvip/solana-priority-fee)**. It helps other Solana developers find it.
 
 ## The problem
 
@@ -148,6 +153,12 @@ Issues and pull requests are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md). Qu
 | [solana-ws-keepalive](https://github.com/blixvip/solana-ws-keepalive) | Solana WebSocket subscriptions that reconnect on their own |
 | [pump-curve](https://github.com/blixvip/pump-curve) | Read a pump.fun bonding curve: price, market cap, progress, migration (its curve address is a good account to scope fees to) |
 | [solana-tx-parse](https://github.com/blixvip/solana-tx-parse) | See the priority fee a landed transaction actually paid |
+
+## Contributors
+
+Every merged pull request is credited in the release notes. Pick a [good first issue](https://github.com/blixvip/solana-priority-fee/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or say hi in the [Discord](https://discord.gg/grokbot).
+
+<a href="https://github.com/blixvip/solana-priority-fee/graphs/contributors"><img src="https://contrib.rocks/image?repo=blixvip/solana-priority-fee" alt="Contributors to solana-priority-fee"></a>
 
 ## License
 
