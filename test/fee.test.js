@@ -168,6 +168,53 @@ test("watch polls one at a time and stops", async (t) => {
   assert.throws(() => watch(100, () => {}), RangeError);
 });
 
+test("watch summarizes distinct slots from bounded successful windows", async (t) => {
+  t.mock.timers.enable({ apis: ["setTimeout"] });
+  const recorded = fixture("recent-fees-raydium-sol-usdc.json");
+  const replies = [
+    { body: { ...recorded, result: recorded.result.slice(0, 2) } },
+    { body: { ...recorded, result: recorded.result.slice(1, 4) } },
+    { status: 429, body: {} },
+    { body: { ...recorded, result: recorded.result.slice(2, 5) } },
+  ];
+  const seen = [];
+  const watcher = watch(1000, (error, estimate) => seen.push([error, estimate]), {
+    accounts: [POOL],
+    historyWindows: 2,
+    fetch: fakeFetch(() => replies.shift()),
+  });
+  t.after(() => watcher.stop());
+  for (let poll = 0; poll < 4; poll++) {
+    if (poll > 0) t.mock.timers.tick(1000);
+    await new Promise((resolve) => setImmediate(resolve));
+  }
+
+  const first = seen[0][1];
+  assert.equal(first.history.windows, 1);
+  assert.equal(first.history.trend, null);
+  const second = seen[1][1];
+  assert.equal(second.slots, 3);
+  assert.equal(second.history.summary.slots, 4);
+  assert.equal(second.history.windows, 2);
+  assert.equal(second.history.trend, "down");
+  assert.equal(seen[2][0].status, 429);
+  assert.equal(seen[2][1], null);
+  const last = seen[3][1];
+  assert.equal(last.history.summary.firstSlot, recorded.result[1].slot);
+  assert.equal(last.history.summary.slots, 4);
+  assert.equal(last.history.trend, "flat");
+});
+
+test("watch rejects an invalid window count before polling", () => {
+  const fetch = () => assert.fail("invalid watch history must not send an RPC request");
+  for (const historyWindows of [0, 61, 2.5, "2"]) {
+    assert.throws(() => {
+      const watcher = watch(1000, () => {}, { historyWindows, fetch });
+      watcher.stop();
+    }, RangeError);
+  }
+});
+
 test("CLI --help runs offline", () => {
   const r = spawnSync(process.execPath, [new URL("../bin/cli.js", import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1"), "--help"], { encoding: "utf8" });
   assert.equal(r.status, 0);

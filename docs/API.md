@@ -69,6 +69,12 @@ Calls `estimatePriorityFee(options)` now and then every `intervalMs` (minimum 10
 so requests never overlap. `callback(error, estimate)`: one of the two is `null`. An exception thrown inside your
 callback is not swallowed.
 
+Pass `historyWindows` from 2 to 60 to include a `history` field on each successful estimate. It contains the number of
+successful windows retained, a `summary` over their distinct slots (the latest observation wins when windows overlap),
+and a `trend` of `up`, `down`, or `flat` based on the change in p50 from the oldest to the newest window. The trend is
+`null` until both windows have usable samples. Failed polls do not consume a window. The default value of 1 omits
+the history field. The rest of the estimate always describes the latest window.
+
 ## `costLamports(price, computeUnits) → number | bigint`
 
 The priority fee the runtime charges: `ceil(price × computeUnitLimit / 1,000,000)` lamports, saturating at u64::MAX

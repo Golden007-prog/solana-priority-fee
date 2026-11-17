@@ -56,14 +56,28 @@ export interface EstimateOptions extends NetOptions {
   levels?: Levels;
 }
 
+export interface WatchOptions extends EstimateOptions {
+  /** Number of successful windows to keep, from 1 to 60. Defaults to 1 (history omitted). */
+  historyWindows?: number;
+}
+
+export interface WatchEstimate extends FeeEstimate {
+  history?: {
+    windows: number;
+    summary: FeeSummary;
+    /** Change in p50 between the oldest and newest retained windows. */
+    trend: "up" | "down" | "flat" | null;
+  };
+}
+
 export declare function estimatePriorityFee(options?: EstimateOptions): Promise<FeeEstimate>;
 export declare function getRecentFees(accounts?: string[], options?: NetOptions): Promise<FeeSample[]>;
 export declare function summarizeFees(samples: FeeSample[], options?: { ignoreZero?: boolean; levels?: Levels }): FeeSummary;
 export declare function percentile(sorted: number[], p: number): number;
 export declare function watch(
   intervalMs: number,
-  callback: (error: Error | null, estimate: FeeEstimate | null) => void,
-  options?: EstimateOptions,
+  callback: (error: Error | null, estimate: WatchEstimate | null) => void,
+  options?: WatchOptions,
 ): { stop(): void };
 
 export type Whole = number | bigint | string;

@@ -96,10 +96,16 @@ export function summarizeFees(samples, { ignoreZero = false, levels = {} } = {})
  * Estimate a priority fee from the RPC's recent per-slot fees.
  * @param {{ accounts?: string[], rpcUrl?: string, ignoreZero?: boolean, levels?: Record<string, number>, fetch?: typeof fetch, timeoutMs?: number }} [options]
  */
-export async function estimatePriorityFee({ accounts = [], ignoreZero = false, levels, ...net } = {}) {
+export async function estimatePriorityFee(options = {}) {
+  const { estimate } = await estimateWindow(options);
+  return estimate;
+}
+
+async function estimateWindow({ accounts = [], ignoreZero = false, levels, ...net }) {
   const list = checkAccounts(accounts);
   const samples = await getRecentFees(list, net);
-  return { accounts: list, ...summarizeFees(samples, { ignoreZero, levels }) };
+  const estimate = { accounts: list, ...summarizeFees(samples, { ignoreZero, levels }) };
+  return { estimate, samples };
 }
 
 /**
@@ -107,16 +113,34 @@ export async function estimatePriorityFee({ accounts = [], ignoreZero = false, l
  * The callback gets (error, estimate). Returns { stop() }.
  * @param {number} intervalMs
  * @param {(error: Error|null, estimate: object|null) => void} callback
- * @param {Parameters<typeof estimatePriorityFee>[0]} [options]
+ * @param {Parameters<typeof estimatePriorityFee>[0] & { historyWindows?: number }} [options]
  */
-export function watch(intervalMs, callback, options = {}) {
+export function watch(intervalMs, callback, { historyWindows = 1, ...options } = {}) {
   if (!(Number.isFinite(intervalMs) && intervalMs >= 1000)) throw new RangeError("intervalMs must be at least 1000: the RPC's fee cache moves one slot (~400 ms) at a time, and polling faster only spends rate limit");
   if (typeof callback !== "function") throw new TypeError("callback must be a function");
+  if (!Number.isInteger(historyWindows) || historyWindows < 1 || historyWindows > 60) throw new RangeError("historyWindows must be an integer from 1 to 60");
   checkAccounts(options.accounts);
+  const windows = [];
   let stopped = false, timer = null;
   const tick = async () => {
     let result = null, error = null;
-    try { result = await estimatePriorityFee(options); } catch (e) { error = e; }
+    try {
+      const { estimate, samples } = await estimateWindow(options);
+      if (historyWindows > 1) {
+        windows.push({ samples, median: estimate.samplesUsed ? estimate.percentiles.p50 : null });
+        if (windows.length > historyWindows) windows.shift();
+        const bySlot = new Map();
+        for (const window of windows) {
+          for (const sample of window.samples) bySlot.set(sample.slot, sample);
+        }
+        const first = windows[0].median;
+        const last = windows.at(-1).median;
+        const trend = windows.length < 2 || first === null || last === null
+          ? null : last > first ? "up" : last < first ? "down" : "flat";
+        estimate.history = { windows: windows.length, summary: summarizeFees([...bySlot.values()], options), trend };
+      }
+      result = estimate;
+    } catch (e) { error = e; }
     if (stopped) return;
     timer = setTimeout(tick, intervalMs);
     callback(error, result);   // not caught: an exception in your callback should not vanish
