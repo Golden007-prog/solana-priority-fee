@@ -4,6 +4,8 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-11-17
+
 ### Added
 
 - `watch()` can keep a configurable number of recent fee windows and report a distinct-slot summary and median trend. Thanks [@Golden007-prog](https://github.com/Golden007-prog) (#5).
