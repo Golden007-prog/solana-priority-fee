@@ -28,7 +28,7 @@ A Solana transaction that touches a busy account (a popular pool, a pump.fun bon
 - Named levels `low` / `medium` / `high` / `veryHigh` / `unsafeMax` mapped to percentiles (25 / 50 / 75 / 95 / 100), each one changeable, and your own levels added.
 - `costLamports(price, cu)`: the lamport cost, rounded the way the runtime rounds it.
 - `toInstructionsData(price, cuLimit)`: the SetComputeUnitLimit and SetComputeUnitPrice instruction data and the program id, so you can build them without `@solana/web3.js`.
-- `watch(intervalMs, cb)`: re-estimate on an interval, never two requests at once.
+- `watch(intervalMs, cb)`: re-estimate on an interval, never two requests at once. Set `historyWindows` to include a rolling summary and median trend across recent polls.
 - A CLI with a table or `--json`. TypeScript declarations included.
 - Works with any Solana RPC, including the free public one. No Blix service is used or needed.
 
