@@ -77,12 +77,17 @@ export function summarizeFees(samples, { ignoreZero = false, levels = {} } = {})
   const used = (ignoreZero ? all.filter((f) => f > 0) : all).sort((a, b) => a - b);
   const percentiles = Object.fromEntries(Object.entries(PERCENTILES).map(([k, p]) => [k, percentile(used, p)]));
   const recommended = Object.fromEntries(Object.entries(map).map(([k, p]) => [k, percentile(used, p)]));
-  const slots = samples.map((s) => s.slot);
+  let firstSlot = Infinity;
+  let lastSlot = -Infinity;
+  for (const { slot } of samples) {
+    firstSlot = Math.min(firstSlot, slot);
+    lastSlot = Math.max(lastSlot, slot);
+  }
   return {
     unit: "microLamportsPerComputeUnit",
     slots: samples.length,
-    firstSlot: slots.length ? Math.min(...slots) : null,
-    lastSlot: slots.length ? Math.max(...slots) : null,
+    firstSlot: samples.length ? firstSlot : null,
+    lastSlot: samples.length ? lastSlot : null,
     samplesUsed: used.length,
     ignoreZero,
     nonZeroShare: all.length ? +(nonZero / all.length).toFixed(4) : 0,

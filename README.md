@@ -117,6 +117,8 @@ Run any of them with `node examples/<name>.js`.
 
 `estimatePriorityFee`, `getRecentFees`, `summarizeFees`, `percentile`, `watch`, `costLamports`, `toInstructionsData`, `setComputeUnitLimitData`, `setComputeUnitPriceData`, the constants, and the `RpcError` / `RpcTimeoutError` classes. Full reference in [docs/API.md](docs/API.md); types in [index.d.ts](index.d.ts).
 
+`summarizeFees` accepts stored fee histories in any slot order.
+
 ## Configuration
 
 | | |

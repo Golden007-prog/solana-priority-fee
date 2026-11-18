@@ -57,7 +57,7 @@ The raw samples, sorted by slot.
 
 ## `summarizeFees(samples, { ignoreZero?, levels? }) → FeeSummary`
 
-Pure: what `estimatePriorityFee` does after the request. Feed it your own samples or a stored history.
+Pure: what `estimatePriorityFee` does after the request. Feed it your own samples or a stored history in any order. The slot bounds are `null` when no samples are supplied.
 
 ## `percentile(sortedAscending, p) → number`
 

@@ -72,6 +72,7 @@ export interface WatchEstimate extends FeeEstimate {
 
 export declare function estimatePriorityFee(options?: EstimateOptions): Promise<FeeEstimate>;
 export declare function getRecentFees(accounts?: string[], options?: NetOptions): Promise<FeeSample[]>;
+/** Summarize samples from a recent window or a stored history in any slot order. */
 export declare function summarizeFees(samples: FeeSample[], options?: { ignoreZero?: boolean; levels?: Levels }): FeeSummary;
 export declare function percentile(sorted: number[], p: number): number;
 export declare function watch(

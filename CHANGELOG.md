@@ -4,6 +4,10 @@ All notable changes to this project are documented here. The format follows [Kee
 
 ## [Unreleased]
 
+### Fixed
+
+- `summarizeFees` computes slot bounds without spreading large histories into the call stack.
+
 ## [1.1.0] - 2026-11-17
 
 ### Added

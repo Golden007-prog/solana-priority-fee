@@ -89,6 +89,20 @@ test("all-zero window (the unfiltered global fixture) gives zeros, not NaN", () 
   assert.deepEqual(Object.values(r.recommended), [0, 0, 0, 0, 0]);
 });
 
+test("summarizeFees finds bounds across a long unsorted history", () => {
+  const length = 300_000;
+  const samples = Array.from({ length }, (_, i) => ({ slot: (i + 123_456) % length, fee: i % 5 }));
+  const summary = summarizeFees(samples);
+  assert.equal(summary.firstSlot, 0);
+  assert.equal(summary.lastSlot, length - 1);
+  assert.equal(summary.slots, length);
+  assert.equal(summary.percentiles.p50, 2);
+
+  const empty = summarizeFees([]);
+  assert.equal(empty.firstSlot, null);
+  assert.equal(empty.lastSlot, null);
+});
+
 test("levels are configurable and validated", () => {
   const r = summarizeFees([{ slot: 1, fee: 10 }, { slot: 2, fee: 20 }, { slot: 3, fee: 30 }, { slot: 4, fee: 40 }], { levels: { medium: 75, turbo: 90 } });
   assert.equal(r.recommended.medium, 30);
